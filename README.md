@@ -15,6 +15,11 @@ http:localhost:3000/admin
 Username:admin@example.com
 password:password
 
+Create a model using
+ `rails g model [MyModelName]`
+
+Create active admin model for this,
+`rails generate active_admin:resource [MyModelName]`
 **Reference
 http://activeadmin.info/docs/documentation.html
 
