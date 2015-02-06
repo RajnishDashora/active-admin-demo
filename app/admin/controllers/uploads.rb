@@ -4,6 +4,7 @@ ActiveAdmin.register_page 'Uploads' do
   controller do
     layout 'active_admin'
     require 'creek'
+    
     def upload
       if(update_tables(saved_file_path(params[:upload][:file])))
         flash[:notice] = "Data Imported successfully"
@@ -14,12 +15,14 @@ ActiveAdmin.register_page 'Uploads' do
     def index
     end
 
+    #return of this function should be truthy only if data upload passes
     def update_tables(file_path)
       creek = initialize_creek(file_path)
       creek.sheets.each do |sheet|
         headers = extract_headers_from_sheet(sheet)
         sheet.rows.drop(1).each do |row|
           attr = create_row_for_table(row, headers)
+          #need to make the database/table name dependent on sheet
           Test.create(attr)
         end
       end
