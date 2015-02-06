@@ -5,24 +5,24 @@ ActiveAdmin.register_page 'Uploads' do
     layout 'active_admin'
     require 'creek'
     def upload
-      file_path=saved_file_path(params[:upload][:file])
-      if(file_path)
-        creek = initialize_creek(file_path)
-
-        creek.sheets.each do |sheet|
-          headers = extract_headers_from_sheet(sheet)
-          sheet.rows.drop(1).each do |row|
-            attr = create_row_for_table(row,headers)
-            Test.create(attr)
-          end
-        end
-
+      if(update_tables(saved_file_path(params[:upload][:file])))
         flash[:notice] = "Data Imported successfully"
         redirect_to action: :index
       end
     end
 
     def index
+    end
+
+    def update_tables(file_path)
+      creek = initialize_creek(file_path)
+      creek.sheets.each do |sheet|
+        headers = extract_headers_from_sheet(sheet)
+        sheet.rows.drop(1).each do |row|
+          attr = create_row_for_table(row, headers)
+          Test.create(attr)
+        end
+      end
     end
 
     def initialize_creek(file_path)
