@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace 'admin' do
     get '/' => 'uploads#index'
-    post '/upload' => 'uploads#upload'
+    post '/uploads' => 'uploads#upload'
   end
 
 

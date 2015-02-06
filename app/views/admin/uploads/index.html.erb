@@ -1,5 +1,7 @@
-<form method="post" action="/admin/upload">
-  Upload Test Excel:
-  <input type="file">
-  <input type="submit" value="Submit">
-</form>
+<div class="container">
+<%= form_tag admin_uploads_path, multipart: true do %>
+    <%= hidden_field :upload, :type, value: 1 %>
+    <%= file_field :upload, :file %>
+    <%= submit_tag 'Upload' %>
+<% end %>
+</div>
