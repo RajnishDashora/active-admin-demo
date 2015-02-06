@@ -7,18 +7,40 @@ ActiveAdmin.register_page 'Uploads' do
     def upload
       file_path=saved_file_path(params[:upload][:file])
       if(file_path)
-        creek = Creek::Book.new file_path
-        sheet= creek.sheets[0]
-        sheet.rows.each do |row|
-          puts row
+        creek = initialize_creek(file_path)
+
+        creek.sheets.each do |sheet|
+          headers = extract_headers_from_sheet(sheet)
+          sheet.rows.drop(1).each do |row|
+            attr = create_row_for_table(row,headers)
+            Test.create(attr)
+          end
         end
-        
+
         flash[:notice] = "Data Imported successfully"
         redirect_to action: :index
       end
     end
 
     def index
+    end
+
+    def initialize_creek(file_path)
+      Creek::Book.new file_path
+    end
+
+    def create_row_for_table(row,headers)
+      i=0
+      attr = Hash.new
+      row.values.each do |value|
+        attr[headers[i]]=value
+        i=i+1
+      end
+      attr
+    end
+
+    def extract_headers_from_sheet(sheet)
+      sheet.rows.first.values
     end
 
     private
