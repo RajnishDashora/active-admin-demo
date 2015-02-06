@@ -3,10 +3,16 @@ ActiveAdmin.register_page 'Uploads' do
 
   controller do
     layout 'active_admin'
+    require 'creek'
     def upload
       file_path=saved_file_path(params[:upload][:file])
       if(file_path)
-        p file_path
+        creek = Creek::Book.new file_path
+        sheet= creek.sheets[0]
+        sheet.rows.each do |row|
+          puts row
+        end
+        
         flash[:notice] = "Data Imported successfully"
         redirect_to action: :index
       end
