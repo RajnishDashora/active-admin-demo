@@ -23,7 +23,8 @@ ActiveAdmin.register_page 'Uploads' do
         sheet.rows.drop(1).each do |row|
           attr = create_row_for_table(row, headers)
           #need to make the database/table name dependent on sheet
-          Test.create(attr)
+          test = Test.create(attr)
+          test.save
         end
       end
     end
@@ -33,11 +34,9 @@ ActiveAdmin.register_page 'Uploads' do
     end
 
     def create_row_for_table(row,headers)
-      i=0
       attr = Hash.new
-      row.values.each do |value|
-        attr[headers[i]]=value
-        i=i+1
+      row.values.each_with_index do |value,index|
+        attr[headers[index]]=value
       end
       attr
     end
